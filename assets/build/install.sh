@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-GITLAB_CLONE_URL=https://github.com/gitlabhq/gitlabhq.git
+GITLAB_CLONE_URL=https://gitlab.com/gitlab-org/gitlab-ee.git
 GITLAB_SHELL_URL=https://gitlab.com/gitlab-org/gitlab-shell/repository/archive.tar.gz
 GITLAB_WORKHORSE_URL=https://gitlab.com/gitlab-org/gitlab-workhorse/repository/archive.tar.gz
 
@@ -76,8 +76,8 @@ PATH=/tmp/go/bin:$PATH GOROOT=/tmp/go make install
 # remove go
 rm -rf ${GITLAB_BUILD_DIR}/go${GOLANG_VERSION}.linux-amd64.tar.gz /tmp/go
 
-# shallow clone gitlab-ce
-echo "Cloning gitlab-ce v.${GITLAB_VERSION}..."
+# shallow clone gitlab-ee
+echo "Cloning gitlab-ee v.${GITLAB_VERSION}..."
 exec_as_git git clone -q -b v${GITLAB_VERSION} --depth 1 ${GITLAB_CLONE_URL} ${GITLAB_INSTALL_DIR}
 
 # remove HSTS config from the default headers, we configure it in nginx
