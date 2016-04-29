@@ -1,8 +1,8 @@
-[![Docker Repository on Quay.io](https://quay.io/repository/sameersbn/gitlab/status "Docker Repository on Quay.io")](https://quay.io/repository/sameersbn/gitlab) [![](https://badge.imagelayers.io/sameersbn/gitlab.svg)](https://imagelayers.io/?images=sameersbn/gitlab:latest 'Get your own badge on imagelayers.io')
+[![](https://badge.imagelayers.io/leftathome/gitlab-ee.svg)](https://imagelayers.io/?images=leftathome/gitlab-ee:latest 'Get your own badge on imagelayers.io')
 
 [![Deploy to Tutum](https://s.tutum.co/deploy-to-tutum.svg)](https://dashboard.tutum.co/stack/deploy/)
 
-# sameersbn/gitlab:8.6.6
+# leftathome/gitlab-ee:8.7.0
 
 - [Introduction](#introduction)
     - [Changelog](Changelog.md)
@@ -65,6 +65,17 @@
 
 # Introduction
 
+This is all a fork of sameersbn/gitlab, but against the Enterprise Edition
+of Gitlab.  It's intended for people who like the way that app is run
+within the container, but who have upgraded to Gitlab Enterprise.
+
+If this works, I'll try to keep this repository updated.  If the original
+maintainer is interested in releasing CE and EE images I'm also happy to
+fold this into a pull request and go away.
+
+Original documentation follows below this point, please make any mental
+adjustments necessary.
+
 Dockerfile to build a [GitLab](https://about.gitlab.com/) container image.
 
 # Contributing
@@ -111,7 +122,7 @@ Automated builds of the image are available on [Dockerhub](https://hub.docker.co
 > **Note**: Builds are also available on [Quay.io](https://quay.io/repository/sameersbn/gitlab)
 
 ```bash
-docker pull sameersbn/gitlab:8.6.6
+docker pull sameersbn/gitlab:8.7.0
 ```
 
 You can also pull the `latest` tag which is built from the repository *HEAD*
