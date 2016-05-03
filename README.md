@@ -2,7 +2,7 @@
 
 [![Deploy to Tutum](https://s.tutum.co/deploy-to-tutum.svg)](https://dashboard.tutum.co/stack/deploy/)
 
-# leftathome/gitlab-ee:8.7.0
+# leftathome/gitlab-ee:8.7.2
 
 - [Introduction](#introduction)
     - [Changelog](Changelog.md)
@@ -122,7 +122,7 @@ Automated builds of the image are available on [Dockerhub](https://hub.docker.co
 > **Note**: Builds are also available on [Quay.io](https://quay.io/repository/sameersbn/gitlab)
 
 ```bash
-docker pull sameersbn/gitlab:8.7.0
+docker pull sameersbn/gitlab:8.7.2
 ```
 
 You can also pull the `latest` tag which is built from the repository *HEAD*
@@ -988,7 +988,7 @@ Execute the rake task to restore a backup. Make sure you run the container in in
 
 ```bash
 docker run --name gitlab -it --rm [OPTIONS] \
-    sameersbn/gitlab:8.6.6 app:rake gitlab:backup:restore
+    sameersbn/gitlab:8.7.2 app:rake gitlab:backup:restore
 ```
 
 The list of all available backups will be displayed in reverse chronological order. Select the backup you want to restore and continue.
@@ -997,7 +997,7 @@ To avoid user interaction in the restore operation, specify the timestamp of the
 
 ```bash
 docker run --name gitlab -it --rm [OPTIONS] \
-    sameersbn/gitlab:8.6.6 app:rake gitlab:backup:restore BACKUP=1417624827
+    sameersbn/gitlab:8.7.2 app:rake gitlab:backup:restore BACKUP=1417624827
 ```
 
 ## Automated Backups
