@@ -210,6 +210,7 @@ production: &base
         method: '{{LDAP_METHOD}}' # "tls" or "ssl" or "plain"
         bind_dn: '{{LDAP_BIND_DN}}'
         password: '{{LDAP_PASS}}'
+        tls_options: {{LDAP_TLSOPTIONS}}
 
         # Set a timeout, in seconds, for LDAP queries. This helps avoid blocking
         # a request if the LDAP server becomes unresponsive.
