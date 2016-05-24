@@ -950,6 +950,13 @@ Below is the complete list of available options that can be used to customize yo
 - **RACK_ATTACK_FINDTIME**: Number of seconds before resetting the per IP auth attempt counter. Defaults to `60`.
 - **RACK_ATTACK_BANTIME**: Number of seconds an IP should be banned after too many auth attempts. Defaults to `3600`.
 - **GITLAB_WORKHORSE_TIMEOUT**: Timeout for gitlab workhorse http proxy. Defaults to `5m0s`.
+- **REGISTRY_ENABLED**: Enables Docker registry integration.  Defaults to `false`.
+- **REGISTRY_HOST**: The host under which the registry will be exposed to users.  Defaults to `GITLAB_HOST`.
+- **REGISTRY_PORT**: The port at which the Docker registry will be exposed to users.  Defaults to `5000`.
+- **REGISTRY_API_URL**: The _internal_ URL which GitLab will use to route requests to the Docker Registry service.  Defaults to `http://localhost:5000/`
+- **REGISTRY_KEY_PATH**: The private key location that is paired with the Registry's `rootcertbundle`.  See [token auth configuration documentation](https://docs.docker.com/registry/configuration/#token) for more details.  Defaults to `config/registry.key`
+- **REGISTRY_PATH**: Should match the path/volume in Docker Registry's rootdirectory.  Read the [storage configuration documentation](https://docs.docker.com/registry/configuration/#storage).  Needs to be readable by GitLab, the web server and the Registry.  Defaults to `shared/registry`
+- **REGISTRY_ISSUER**: Should be the same value configured in the Docker Registry's `issuer`.  Defaults to `gitlab-issuer`
 
 # Maintenance
 

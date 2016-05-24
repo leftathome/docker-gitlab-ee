@@ -777,6 +777,18 @@ gitlab_configure_project_features() {
     GITLAB_WEBHOOK_TIMEOUT
 }
 
+gitlab_configure_registry() {
+  echo "Configuring gitlab::registry..."
+  update_template ${GITLAB_CONFIG} \
+    REGISTRY_ENABLED \
+  REGISTRY_HOST \
+  REGISTRY_PORT \
+  REGISTRY_API_URL \
+  REGISTRY_KEY_PATH \
+  REGISTRY_PATH \
+  REGISTRY_ISSUER
+}
+
 nginx_configure_gitlab_ssl() {
   if [[ ${GITLAB_HTTPS} == true && -f ${SSL_CERTIFICATE_PATH} && -f ${SSL_KEY_PATH} && -f ${SSL_DHPARAM_PATH} ]]; then
     echo "Configuring nginx::gitlab::ssl..."
@@ -1113,6 +1125,7 @@ configure_gitlab() {
   gitlab_configure_rack_attack
   gitlab_configure_ci
   gitlab_configure_artifacts
+  gitlab_configure_registry
   gitlab_configure_lfs
   gitlab_configure_project_features
   gitlab_configure_mail_delivery

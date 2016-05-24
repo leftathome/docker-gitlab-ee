@@ -472,6 +472,14 @@ production: &base
       #
       # Ban an IP for one hour (3600s) after too many auth attempts
       bantime: {{RACK_ATTACK_BANTIME}}
+  registry:
+    enabled: {{REGISTRY_ENABLED}}
+    host: '{{REGISTRY_HOST}}'
+    port: {{REGISTRY_PORT}}
+    api_url: '{{REGISTRY_API_URL}}'
+    key_path: {{REGISTRY_KEY_PATH}}
+    path: {{REGISTRY_PATH}}
+    issuer: '{{REGISTRY_ISSUER}}'
 
 development:
   <<: *base
