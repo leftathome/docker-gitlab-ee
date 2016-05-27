@@ -1,10 +1,10 @@
 FROM sameersbn/ubuntu:14.04.20160416
 MAINTAINER leftathome@gmail.com
 
-ENV GITLAB_VERSION=8.8.1 \
+ENV GITLAB_VERSION=8.8.2 \
     GITLAB_SHELL_VERSION=3.0.0 \
     GITLAB_WORKHORSE_VERSION=0.7.3 \
-    GOLANG_VERSION=1.5.3 \
+    GOLANG_VERSION=1.6.2 \
     GITLAB_USER="git" \
     GITLAB_HOME="/home/git" \
     GITLAB_LOG_DIR="/var/log/gitlab" \
