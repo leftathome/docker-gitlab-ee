@@ -409,6 +409,8 @@ gitlab_configure_ldap() {
     LDAP_BLOCK_AUTO_CREATED_USERS \
     LDAP_BASE \
     LDAP_USER_FILTER \
+    LDAP_GROUP_BASE \
+    LDAP_ADMIN_GROUP \
     LDAP_LABEL
 }
 

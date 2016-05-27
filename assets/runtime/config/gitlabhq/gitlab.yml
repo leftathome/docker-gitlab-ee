@@ -243,6 +243,9 @@ production: &base
         #
         base: '{{LDAP_BASE}}'
 
+        group_base: '{{LDAP_GROUP_BASE}}'
+        admin_group:  '{{LDAP_ADMIN_GROUP}}'
+
         # Filter LDAP users
         #
         #   Format: RFC 4515 http://tools.ietf.org/search/rfc4515

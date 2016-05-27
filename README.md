@@ -889,6 +889,8 @@ Below is the complete list of available options that can be used to customize yo
 - **LDAP_ALLOW_USERNAME_OR_EMAIL_LOGIN**: If enabled, GitLab will ignore everything after the first '@' in the LDAP username submitted by the user on login. Defaults to `false` if `LDAP_UID` is `userPrincipalName`, else `true`.
 - **LDAP_BLOCK_AUTO_CREATED_USERS**: Locks down those users until they have been cleared by the admin. Defaults to `false`.
 - **LDAP_BASE**: Base where we can search for users. No default.
+- **LDAP_GROUP_BASE**: Base where we can search for groups. No default.
+- **LDAP_ADMIN_GROUP**: Canonical name of LDAP group that contains GitLab EE admins.  ('admins', not 'cn=admins')
 - **LDAP_USER_FILTER**: Filter LDAP users. No default.
 - **OAUTH_ENABLED**: Enable OAuth support. Defaults to `true` if any of the support OAuth providers is configured, else defaults to `false`.
 - **OAUTH_AUTO_SIGN_IN_WITH_PROVIDER**: Automatically sign in with a specific OAuth provider without showing GitLab sign-in page. Accepted values are `google_oauth2`, `twitter`, `github`, `gitlab`, `bitbucket` and `saml`. No default.
