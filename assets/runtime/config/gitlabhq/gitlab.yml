@@ -330,7 +330,7 @@ production: &base
           label: 'GitHub',
           app_id: '{{OAUTH_GITHUB_API_KEY}}',
           app_secret: '{{OAUTH_GITHUB_APP_SECRET}}',
-          url: '{{OAUTH_GITHUB_URL}}'
+          url: '{{OAUTH_GITHUB_URL}}',
           args: { scope: '{{OAUTH_GITHUB_SCOPE}}' } }
       - { name: 'bitbucket',
           app_id: '{{OAUTH_BITBUCKET_API_KEY}}',
