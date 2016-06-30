@@ -2,8 +2,14 @@
 
 This file only reflects the changes that are made in this image. Please refer to the upstream GitLab [CHANGELOG](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/CHANGELOG) for the list of changes in GitLab.
 
+**8.9.1**
+- gitlab: upgrade to EE v8.9.1
+- changelog: Formatting fixes.
+
 **8.8.5**
 - gitlab: Add support for GitHub Enterprise URLs in gitlab.yml.
+- gitlab-shell: Upgrade to 3.0.0
+
 **8.8.2**
 - gitlab: upgrade to EE v8.8.1
 - gitlab-workhorse: upgrade to Golang 1.6.3
