@@ -17,6 +17,7 @@ GITLAB_ROBOTS_CONFIG="${GITLAB_INSTALL_DIR}/public/robots.txt"
 GITLAB_SHELL_CONFIG="${GITLAB_SHELL_INSTALL_DIR}/config.yml"
 GITLAB_NGINX_CONFIG="/etc/nginx/sites-enabled/gitlab"
 GITLAB_CI_NGINX_CONFIG="/etc/nginx/sites-enabled/gitlab_ci"
+GITLAB_REGISTRY_NGINX_CONFIG="/etc/nginx/sites-enabled/gitlab_registry"
 
 # Compares two version strings `a` and `b`
 # Returns
@@ -858,6 +859,16 @@ nginx_configure_gitlab_ci() {
   fi
 }
 
+nginx_configure_gitlab_registry() {
+
+  if [[ $REGISTRY_ENABLED == true ]]; then
+    echo "Configuring nginx::gitlab_registry..."
+    update_template ${GITLAB_REGISTRY_NGINX_CONFIG} \
+      REGISTRY_HOST \
+      REGISTRY_API_URL
+  fi
+}
+
 #   _|_|_|              _|        _|  _|
 #   _|    _|  _|    _|  _|_|_|    _|        _|_|_|
 #   _|_|_|    _|    _|  _|    _|  _|  _|  _|
@@ -1094,6 +1105,10 @@ install_configuration_templates() {
   if [[ -n $GITLAB_CI_HOST ]]; then
     install_template root: nginx/gitlab_ci ${GITLAB_CI_NGINX_CONFIG}
   fi
+
+  if [[ $REGISTRY_ENABLED == true ]]; then
+    install_template root: nginx/gitlab_ci ${GITLAB_REGISTRY_NGINX_CONFIG}
+  fi
 }
 
 configure_gitlab() {
@@ -1163,6 +1178,7 @@ configure_nginx() {
   sed -i "s|worker_processes .*|worker_processes ${NGINX_WORKERS};|" /etc/nginx/nginx.conf
   nginx_configure_gitlab
   nginx_configure_gitlab_ci
+  nginx_configure_gitlab_registry
 }
 
 migrate_database() {
