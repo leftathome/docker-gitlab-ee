@@ -10,17 +10,25 @@ postgresql:
     - /srv/docker/gitlab/postgresql:/var/lib/postgresql
 gitlab:
   restart: always
-  image: leftathome/gitlab-ee:latest
+  build: .
   links:
     - redis:redisio
     - postgresql:postgresql
+    - registry:registry
   ports:
     - "10080:80"
     - "10022:22"
+    - 5000
   environment:
     - DEBUG=false
     - TZ=Asia/Kolkata
     - GITLAB_TIMEZONE=Kolkata
+
+    - DB_ADAPTER=postgresql
+    - DB_HOST=postgresql
+    - DB_USER=gitlab
+    - DB_PASS=password
+    - DB_NAME=gitlabhq_production
 
     - GITLAB_SECRETS_DB_KEY_BASE=long-and-random-alphanumeric-string
 
@@ -55,8 +63,37 @@ gitlab:
     - IMAP_PASS=password
     - IMAP_SSL=true
     - IMAP_STARTTLS=false
+
+    - OAUTH_GITHUB_API_KEY=client-id
+    - OAUTH_GITHUB_APP_SECRET=app-secret
+    - OAUTH_GITHUB_SCOPE=user:email
+    - OAUTH_GITHUB_URL=https://github.com
+
+    - REGISTRY_ENABLED=true
+    - REGISTRY_PORT=5000
+    - REGISTRY_API_URL=http://registry:5000/
+    - REGISTRY_KEY_PATH=config/registry.key
+    - REGISTRY_PATH=/home/git/data/registry
+    - REGISTRY_HTTP_SECRET=something-registry-and-gitlab-share
+    - REGISTRY_ISSUER=gitlab-issuer
+  entrypoint:
+    - /bin/bash
+    - -x
+  command:
+    - /sbin/entrypoint.sh
+    - app:start
+#    - --trace
   volumes:
     - /srv/docker/gitlab/gitlab:/home/git/data
+registry:
+  image: registry:2
+  environment:
+    - REGISTRY_HTTP_SECRET=something-registry-and-gitlab-share
+    - REGISTRY_LOG_LEVEL=debug
+    - REGISTRY_LOG_FORMATTER=text
+    - REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY=/registry_storage
+  volumes:
+    - /srv/docker/gitlab/registry:/registry_storage
 redis:
   restart: always
   image: sameersbn/redis:latest
