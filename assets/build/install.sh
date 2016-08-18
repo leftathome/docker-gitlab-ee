@@ -236,6 +236,8 @@ command=bundle exec sidekiq -c {{SIDEKIQ_CONCURRENCY}}
   -q incoming_email
   -q runner
   -q common
+  -q pages
+  -q elasticsearch
   -q default
   -e ${RAILS_ENV}
   -t {{SIDEKIQ_SHUTDOWN_TIMEOUT}}
