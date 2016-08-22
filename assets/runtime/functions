@@ -865,6 +865,7 @@ nginx_configure_gitlab_registry() {
     echo "Configuring nginx::gitlab_registry..."
     update_template ${GITLAB_REGISTRY_NGINX_CONFIG} \
       REGISTRY_HOST \
+      REGISTRY_PORT \
       REGISTRY_API_URL
   fi
 }

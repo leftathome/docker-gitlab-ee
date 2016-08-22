@@ -43,6 +43,7 @@ EOF
 
 # configure git for ${GITLAB_USER}
 exec_as_git git config --global core.autocrlf input
+exec_as_git git config --global gc.auto 0
 
 # install gitlab-shell
 echo "Downloading gitlab-workhorse v.${GITLAB_SHELL_VERSION}..."
@@ -56,8 +57,9 @@ cd ${GITLAB_SHELL_INSTALL_DIR}
 exec_as_git cp -a ${GITLAB_SHELL_INSTALL_DIR}/config.yml.example ${GITLAB_SHELL_INSTALL_DIR}/config.yml
 exec_as_git ./bin/install
 
-# remove unused repositories directory created by gitlab-shell install
+# remove unused repositories directory created by gitlab-shell install, but recreate it so it exists for later steps.
 exec_as_git rm -rf ${GITLAB_HOME}/repositories
+exec_as_git mkdir -p ${GITLAB_HOME}/repositories
 
 echo "Downloading gitlab-workhorse v.${GITLAB_WORKHORSE_VERSION}..."
 mkdir -p ${GITLAB_WORKHORSE_INSTALL_DIR}
@@ -100,7 +102,7 @@ exec_as_git cp ${GITLAB_INSTALL_DIR}/config/gitlab.yml.example ${GITLAB_INSTALL_
 exec_as_git cp ${GITLAB_INSTALL_DIR}/config/database.yml.mysql ${GITLAB_INSTALL_DIR}/config/database.yml
 
 echo "Compiling assets. Please be patient, this could take a while..."
-exec_as_git bundle exec rake assets:clean assets:precompile USE_DB=false >/dev/null 2>&1
+exec_as_git bundle exec rake assets:clean assets:precompile USE_DB=false 2>&1
 
 # remove auto generated ${GITLAB_DATA_DIR}/config/secrets.yml
 rm -rf ${GITLAB_DATA_DIR}/config/secrets.yml
@@ -258,8 +260,8 @@ directory=${GITLAB_INSTALL_DIR}
 environment=HOME=${GITLAB_HOME}
 command=/usr/local/bin/gitlab-workhorse
   -listenUmask 0
-  -listenNetwork unix
-  -listenAddr ${GITLAB_INSTALL_DIR}/tmp/sockets/gitlab-workhorse.socket
+  -listenNetwork tcp
+  -listenAddr :8181
   -authBackend http://127.0.0.1:8080{{GITLAB_RELATIVE_URL_ROOT}}
   -authSocket ${GITLAB_INSTALL_DIR}/tmp/sockets/gitlab.socket
   -documentRoot ${GITLAB_INSTALL_DIR}/public

@@ -9,7 +9,7 @@
 server {
   # If a different port is specified in https://gitlab.com/gitlab-org/gitlab-ce/blob/8-8-stable/config/gitlab.yml.example#L182,
   # it should be declared here as well
-  listen *:80;
+  listen *:{{REGISTRY_PORT}};
   server_name  {{REGISTRY_HOST}};
   server_tokens off; ## Don't show the nginx version number, a security best practice
 
