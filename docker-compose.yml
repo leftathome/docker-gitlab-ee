@@ -8,6 +8,14 @@ postgresql:
     - DB_EXTENSION=pg_trgm
   volumes:
     - /srv/docker/gitlab/postgresql:/var/lib/postgresql
+elasticsearch:
+  restart: always
+  image: elasticsearch:2
+  environment:
+    - ES_JAVA_OPTS=""
+  volumes:
+    - /srv/docker/gitlab/elasticsearch/data:/usr/share/elasticsearch/data
+    #- /srv/docker/gitlab/elasticsearch/config:/usr/share/elasticsearch/config
 gitlab:
   restart: always
   build: .
