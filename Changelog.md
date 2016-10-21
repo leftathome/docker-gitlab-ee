@@ -2,6 +2,14 @@
 
 This file only reflects the changes that are made in this image. Please refer to the upstream GitLab [CHANGELOG](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/CHANGELOG) for the list of changes in GitLab.
 
+**8.11.0**
+- gitlab: upgrade to EE v8.11.0.
+- Forward-ported some changes to make entrypoint script work with NFS-mounted data directory.
+- Ported in some changes from upstream to support new 8.11.x gitlab-secrets consolidation.
+- Numerous documentation changes, please check the README for the latest.
+- gitlab-shell: Upgrade to 3.4.0.
+- gitlab-workhorse: Upgrade to 0.7.11.
+- ruby: Upgrade to 2.3.
 **8.10.4**
 - gitlab: upgrade to EE v8.10.4.
 - nginx: Startup and template fixes for GitLab container registry support.
