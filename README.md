@@ -1063,7 +1063,7 @@ docker run --name gitlab -it --rm [OPTIONS] \
 Or
 
 ```bash
-docker exec -it gitlab sudo -HEu git bundle exec rake gitlab:import:repos RAILS_ENV=production
+docker exec --user git -it gitlab bundle exec rake gitlab:env:info RAILS_ENV=production
 ```
 
 For a complete list of available rake tasks please refer https://github.com/gitlabhq/gitlabhq/tree/master/doc/raketasks or the help section of your gitlab installation.
