@@ -30,8 +30,9 @@ production: &base
   gitlab:
     ## Web server settings (note: host is the FQDN, do not include http://)
     host: {{GITLAB_HOST}}
-    port: {{GITLAB_PORT}}
-    https: {{GITLAB_HTTPS}}
+    port: {{GITLAB_PORT}} # Set to 443 if using HTTPS, see installation.md#using-https for additional HTTPS configuration details
+    https: {{GITLAB_HTTPS}} # Set to true if using HTTPS, see installation.md#using-https for additional HTTPS configuration details
+
 
     # Uncommment this line below if your ssh host is different from HTTP/HTTPS one
     # (you'd obviously need to replace ssh.host_example.com with your own host).
@@ -158,7 +159,12 @@ production: &base
     # Flag stuck CI builds as failed
     stuck_ci_builds_worker:
       cron: "0 0 * * *"
-
+    # Remove expired build artifacts
+    expire_build_artifacts_worker:
+      cron: "50 * * * *"
+    # Send admin emails once a week
+    admin_email_worker:
+      cron: "0 0 * * 0"
 
   #
   # 2. GitLab CI settings
