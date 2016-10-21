@@ -39,6 +39,8 @@ gitlab:
     - DB_NAME=gitlabhq_production
 
     - GITLAB_SECRETS_DB_KEY_BASE=long-and-random-alphanumeric-string
+    - GITLAB_SECRETS_SECRET_KEY_BASE=long-and-random-alphanumeric-string
+    - GITLAB_SECRETS_OTP_KEY_BASE=long-and-random-alphanumeric-string
 
     - GITLAB_HOST=localhost
     - GITLAB_PORT=10080
