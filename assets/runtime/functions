@@ -40,6 +40,43 @@ exec_as_git() {
   fi
 }
 
+## Make and set permissions for a directory, $1.
+## Setting $2 to true will cause the operations to be run as the git user instead of root,
+## which is desirable on remote mounts (NFS, CIFS, etc.).
+make_directory() {
+  if [[ $2 == true ]]; then
+    exec_as_git mkdir -p $1
+    exec_as_git chmod 755 $1
+    exec_as_git chown ${GITLAB_USER}: $1
+  else
+    mkdir -p $1
+    chmod 755 $1
+    chown ${GITLAB_USER}: $1
+  fi
+}
+
+## As with make_directory(), but set some extra permissions
+make_directory_with_user_group_permissions() {
+  make_directory $1 $2 
+  if [[ $2 == true ]]; then
+    exec_as_git chmod ug+rwX,o-rwx $1
+    exec_as_git chmod g+s $1
+  else
+    chmod ug+rwX,o-rwx $1
+    exec_as_git chmod g+s $1
+  fi
+}
+
+# As with make_directory(), but set user-only permissions.
+make_directory_with_user_permissions() {
+  make_directory $1 $2
+  if [[ $2 == true ]]; then
+    exec_as_git chmod u+rwX $1
+  else
+    chmod u+rwX $1
+    exec_as_git chmod g+s $1
+  fi
+}
 ## Copies configuration template to the destination as the specified USER
 ### Looks up for overrides in ${USERCONF_TEMPLATES_DIR} before using the defaults from ${SYSCONF_TEMPLATES_DIR}
 # $1: copy-as user
@@ -919,23 +956,24 @@ initialize_logdir() {
 
 initialize_datadir() {
   echo "Initializing datadir..."
-  chmod 755 ${GITLAB_DATA_DIR}
-  chown ${GITLAB_USER}: ${GITLAB_DATA_DIR}
+  if [[ ! -d $GITLAB_DATA_DIR ]]; then
+    make_directory ${GITLAB_DATA_DIR} ${GITLAB_DATA_NFS}
+  fi
 
   # create the ssh directory for server keys
-  mkdir -p ${GITLAB_DATA_DIR}/ssh
-  chown -R root: ${GITLAB_DATA_DIR}/ssh
+  if [[ ! -d $GITLAB_DATA_DIR ]]; then
+    make_directory ${GITLAB_DATA_DIR}/ssh ${GITLAB_DATA_NFS}
+  fi
 
   # create the repositories directory and make sure it has the right permissions
-  mkdir -p ${GITLAB_REPOS_DIR}
-  chown ${GITLAB_USER}: ${GITLAB_REPOS_DIR}
-  chmod ug+rwX,o-rwx ${GITLAB_REPOS_DIR}
-  exec_as_git chmod g+s ${GITLAB_REPOS_DIR}
+  if [[ ! -d $GITLAB_REPOS_DIR ]]; then
+    make_directory_with_user_group_permissions ${GITLAB_REPOS_DIR} ${GITLAB_REPOS_NFS}
+  fi
 
   # create build traces directory
-  mkdir -p ${GITLAB_BUILDS_DIR}
-  chmod u+rwX ${GITLAB_BUILDS_DIR}
-  chown ${GITLAB_USER}: ${GITLAB_BUILDS_DIR}
+  if [[ ! -d $GITLAB_BUILDS_DIR ]]; then
+    make_directory_with_user_permissions ${GITLAB_BUILDS_DIR} ${GITLAB_DATA_NFS}
+  fi
 
   # gitlab:backup:create does not respect the builds_path configuration, so we
   # symlink ${GITLAB_INSTALL_DIR}/builds -> ${GITLAB_BUILDS_DIR}
@@ -943,53 +981,57 @@ initialize_datadir() {
   ln -sf ${GITLAB_BUILDS_DIR} ${GITLAB_INSTALL_DIR}/builds
 
   # create downloads directory
-  mkdir -p ${GITLAB_DOWNLOADS_DIR}
-  chmod u+rwX ${GITLAB_DOWNLOADS_DIR}
-  chown ${GITLAB_USER}: ${GITLAB_DOWNLOADS_DIR}
+  if [[ ! -d $GITLAB_DOWNLOADS_DIR ]]; then
+  make_directory_with_user_permissions ${GITLAB_DOWNLOADS_DIR} ${GITLAB_DATA_NFS}
+  fi
 
   # create shared directory
-  mkdir -p ${GITLAB_SHARED_DIR}
-  chmod u+rwX ${GITLAB_SHARED_DIR}
-  chown ${GITLAB_USER}: ${GITLAB_SHARED_DIR}
+  if [[ ! -d $GITLAB_SHARED_DIR ]]; then
+  make_directory_with_user_permissions ${GITLAB_SHARED_DIR} ${GITLAB_DATA_NFS}
+  fi
 
-  mkdir -p ${GITLAB_ARTIFACTS_DIR}
-  chmod u+rwX ${GITLAB_ARTIFACTS_DIR}
-  chown ${GITLAB_USER}: ${GITLAB_ARTIFACTS_DIR}
+  # create artifacts directory
+  if [[ ! -d $GITLAB_ARTIFACTS_DIR ]]; then
+  make_directory_with_user_permissions ${GITLAB_ARTIFACTS_DIR} ${GITLAB_DATA_NFS}
+  fi
 
   # symlink ${GITLAB_INSTALL_DIR}/shared -> ${GITLAB_DATA_DIR}/shared
-  rm -rf ${GITLAB_INSTALL_DIR}/shared
-  ln -sf ${GITLAB_SHARED_DIR} ${GITLAB_INSTALL_DIR}/shared
+  if [[ ! -h ${GITLAB_INSTALL_DIR}/shared ]]; then
+    rm -rf ${GITLAB_INSTALL_DIR}/shared
+    ln -sf ${GITLAB_SHARED_DIR} ${GITLAB_INSTALL_DIR}/shared
+  fi
 
   # create lfs-objects directory
-  mkdir -p ${GITLAB_LFS_OBJECTS_DIR}
-  chmod u+rwX ${GITLAB_LFS_OBJECTS_DIR}
-  chown ${GITLAB_USER}: ${GITLAB_LFS_OBJECTS_DIR}
+  if [[ ! -d $GITLAB_LFS_OBJECTS_DIR ]]; then
+    make_directory_with_user_permissions ${GITLAB_LFS_OBJECTS_DIR} ${GITLAB_DATA_NFS}
+  fi
 
   # create the backups directory
-  mkdir -p ${GITLAB_BACKUP_DIR}
-  chown ${GITLAB_USER}: ${GITLAB_BACKUP_DIR}
+  if [[ ! -d $GITLAB_BACKUP_DIR ]]; then
+    make_directory_with_user_permissions ${GITLAB_BACKUP_DIR} ${GITLAB_DATA_NFS}
+  fi
 
   # create the uploads directory
-  mkdir -p ${GITLAB_DATA_DIR}/uploads
-  chmod 0700 ${GITLAB_DATA_DIR}/uploads
-  chown ${GITLAB_USER}: ${GITLAB_DATA_DIR}/uploads
+  if [[ ! -d $GITLAB_DATA_DIR/uploads ]]; then
+    make_directory_with_user_permissions ${GITLAB_DATA_DIR}/uploads ${GITLAB_DATA_NFS}
+    exec_as_git chmod 0700 ${GITLAB_DATA_DIR}/uploads
+  fi
 
   # create the .ssh directory
-  mkdir -p ${GITLAB_DATA_DIR}/.ssh
-  touch ${GITLAB_DATA_DIR}/.ssh/authorized_keys
-  chmod 700 ${GITLAB_DATA_DIR}/.ssh
-  chmod 600 ${GITLAB_DATA_DIR}/.ssh/authorized_keys
-  chown -R ${GITLAB_USER}: ${GITLAB_DATA_DIR}/.ssh
+  if [[ ! -d $GITLAB_DATA_DIR/.ssh ]]; then
+    make_directory $GITLAB_DATA_DIR/.ssh ${GITLAB_DATA_NFS}
+    exec_as_git touch ${GITLAB_DATA_DIR}/.ssh/authorized_keys
+    chmod 700 ${GITLAB_DATA_DIR}/.ssh
+    chmod 600 ${GITLAB_DATA_DIR}/.ssh/authorized_keys
+    chown -R ${GITLAB_USER}: ${GITLAB_DATA_DIR}/.ssh
+  fi
 
   # recompile and persist assets when relative_url is in use
   if [[ -n ${GITLAB_RELATIVE_URL_ROOT} ]]; then
-    mkdir -p ${GITLAB_TEMP_DIR}/cache
-    chmod 755 ${GITLAB_TEMP_DIR}/cache
-    chown ${GITLAB_USER}: ${GITLAB_TEMP_DIR}/cache
-
-    mkdir -p ${GITLAB_TEMP_DIR}/assets
-    chmod 755 ${GITLAB_TEMP_DIR}/assets
-    chown ${GITLAB_USER}: ${GITLAB_TEMP_DIR}/assets
+    make_directory ${GITLAB_TEMP_DIR}/cache ${GITLAB_DATA_NFS}
+    make_directory ${GITLAB_TEMP_DIR}/assets ${GITLAB_DATA_NFS}
+    exec_as_git chmod 755 ${GITLAB_TEMP_DIR}/cache
+    exec_as_git chmod 755 ${GITLAB_TEMP_DIR}/assets
 
     # symlink ${GITLAB_INSTALL_DIR}/tmp/cache -> ${GITLAB_TEMP_DIR}/cache
     rm -rf ${GITLAB_INSTALL_DIR}/tmp/cache
@@ -1037,7 +1079,11 @@ sanitize_datadir() {
 
 generate_ssh_key() {
   echo -n "${1^^} "
-  ssh-keygen -qt ${1} -N '' -f ${2}
+  if [[ $GITLAB_DATA_NFS == true ]]; then
+    exec_as_git ssh-keygen -qt ${1} -N '' -f ${2}
+  else
+    ssh-keygen -qt ${1} -N '' -f ${2}
+fi
 }
 
 generate_ssh_host_keys() {
@@ -1053,8 +1099,13 @@ generate_ssh_host_keys() {
   fi
 
   # ensure existing host keys have the right permissions
-  chmod 0600 ${GITLAB_DATA_DIR}/ssh/*_key
-  chmod 0644 ${GITLAB_DATA_DIR}/ssh/*.pub
+  if [[ $GITLAB_DATA_NFS == true ]]; then
+    exec_as_git chmod 0600 ${GITLAB_DATA_DIR}/ssh/*_key
+    exec_as_git chmod 0644 ${GITLAB_DATA_DIR}/ssh/*.pub
+  else
+    chmod 0600 ${GITLAB_DATA_DIR}/ssh/*_key
+    chmod 0644 ${GITLAB_DATA_DIR}/ssh/*.pub
+  fi
 }
 
 initialize_system() {
