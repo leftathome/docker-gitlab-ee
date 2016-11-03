@@ -4,6 +4,7 @@ This file only reflects the changes that are made in this image. Please refer to
 
 **8.12.8**
 - gitlab: upgrade to EE v8.12.8 per GitLab security announcement.
+- Bump base image version.
 
 **8.11.10**
 - gitlab: upgrade to EE v8.11.10 per GitLab security announcement.
