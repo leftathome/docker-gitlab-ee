@@ -2,6 +2,13 @@
 
 This file only reflects the changes that are made in this image. Please refer to the upstream GitLab [CHANGELOG](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/CHANGELOG) for the list of changes in GitLab.
 
+**8.10.13**
+- gitlab: upgrade to EE v8.10.13, security fixes!!!
+- Bump minimum required version to 8.10.7, the last version released.
+
+**8.10.7_1**
+- Last version tested with entrypoint script fixes.
+
 **8.10.4**
 - gitlab: upgrade to EE v8.10.4.
 - nginx: Startup and template fixes for GitLab container registry support.
