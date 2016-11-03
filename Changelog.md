@@ -2,6 +2,9 @@
 
 This file only reflects the changes that are made in this image. Please refer to the upstream GitLab [CHANGELOG](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/CHANGELOG) for the list of changes in GitLab.
 
+**8.12.8**
+- gitlab: upgrade to EE v8.12.8 per GitLab security announcement.
+
 **8.11.10**
 - gitlab: upgrade to EE v8.11.10 per GitLab security announcement.
 - Formatting fixes for Changelog.
