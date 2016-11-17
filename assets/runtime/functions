@@ -1299,8 +1299,13 @@ migrate_database() {
       exec_as_git bundle exec rake add_limits_mysql >/dev/null
     fi
 
-    echo "${GITLAB_VERSION}" > ${GITLAB_TEMP_DIR}/VERSION
-    rm -rf ${GITLAB_TEMP_DIR}/GITLAB_RELATIVE_URL_ROOT # force cache cleanup
+    if [[ ${GITLAB_DATA_NFS} == true ]]; then
+      exec_as_git echo "{GITLAB_VERSION" > ${GITLAB_TEMP_DIR}/VERSION
+      exec_as_git rm -rf ${GITLAB_TEMP_DIR}/GITLAB_RELATIVE_URL_ROOT # force cache cleanup
+    else
+      echo "${GITLAB_VERSION}" > ${GITLAB_TEMP_DIR}/VERSION
+      rm -rf ${GITLAB_TEMP_DIR}/GITLAB_RELATIVE_URL_ROOT # force cache cleanup
+    fi
   fi
 
   if [[ -z ${COUNT} || ${COUNT} -eq 0 ]]; then
@@ -1321,7 +1326,11 @@ migrate_database() {
 
     echo "Clearing cache..."
     exec_as_git bundle exec rake cache:clear >/dev/null 2>&1
-    echo "${GITLAB_RELATIVE_URL_ROOT}" > ${GITLAB_TEMP_DIR}/GITLAB_RELATIVE_URL_ROOT
+    if [[ ${GITLAB_DATA_NFS} == true ]]; then
+      exec_as_git echo "${GITLAB_RELATIVE_URL_ROOT}" > ${GITLAB_TEMP_DIR}/GITLAB_RELATIVE_URL_ROOT
+    else
+      echo "${GITLAB_RELATIVE_URL_ROOT}" > ${GITLAB_TEMP_DIR}/GITLAB_RELATIVE_URL_ROOT
+    fi
   fi
 }
 
