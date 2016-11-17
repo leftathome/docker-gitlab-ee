@@ -2,6 +2,16 @@
 
 This file only reflects the changes that are made in this image. Please refer to the upstream GitLab [CHANGELOG](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/CHANGELOG) for the list of changes in GitLab.
 
+**8.12.8_3**
+- Upgrade gitlab-shell to v3.6.1, to match omnibus.
+- Upgrade gitlab-workhorse to v0.8.2, to match omnibus.
+
+**8.12.8_2**
+- Entrypoint script bugfixes.
+
+**8.12.8_1**
+- Entrypoint script bugfixes.
+
 **8.12.8**
 - gitlab: upgrade to EE v8.12.8 per GitLab security announcement.
 - Bump base image version.
