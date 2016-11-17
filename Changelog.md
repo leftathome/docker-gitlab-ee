@@ -2,6 +2,10 @@
 
 This file only reflects the changes that are made in this image. Please refer to the upstream GitLab [CHANGELOG](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/CHANGELOG) for the list of changes in GitLab.
 
+**8.10.13_1**
+- Entrypoint fixes
+- Downgrade gitlab-shell to 3.2.1 (matching omnibus) to resolve permissions issues on merges.
+- Downgrade gitlab-workhorse to 0.7.8 (matching omnibus).
 **8.10.13**
 - gitlab: upgrade to EE v8.10.13, security fixes!!!
 - Bump minimum required version to 8.10.7, the last version released.
