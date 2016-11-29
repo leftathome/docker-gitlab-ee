@@ -2,6 +2,12 @@
 
 This file only reflects the changes that are made in this image. Please refer to the upstream GitLab [CHANGELOG](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/CHANGELOG) for the list of changes in GitLab.
 
+**8.14.0**
+- gitlab: upgrade to EE v8.14.0.
+- GoLang: upgrade to 1.6.3.
+- gitlab-shell: upgrade to 4.0.0.
+- gitlab-workhorse: upgrade to 1.0.0.
+
 **8.13.7**
 - gitlab: upgrade to EE v8.13.7.
 
