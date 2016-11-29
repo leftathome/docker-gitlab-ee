@@ -53,3 +53,4 @@ VOLUME ["${GITLAB_DATA_DIR}", "${GITLAB_LOG_DIR}"]
 WORKDIR ${GITLAB_INSTALL_DIR}
 ENTRYPOINT ["/sbin/entrypoint.sh"]
 CMD ["app:start"]
+HEALTHCHECK CMD curl --fail http://localhost:80/users/sign_in || exit 1
