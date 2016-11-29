@@ -1,6 +1,6 @@
 postgresql:
   restart: always
-  image: sameersbn/postgresql:9.4-19
+  image: sameersbn/postgresql:9.5-3
   environment:
     - DB_USER=gitlab
     - DB_PASS=password
@@ -96,7 +96,7 @@ gitlab:
   volumes:
     - /srv/docker/gitlab/gitlab:/home/git/data
 registry:
-  image: registry:2
+  image: registry:2.4.1
   environment:
     - REGISTRY_HTTP_SECRET=something-registry-and-gitlab-share
     - REGISTRY_LOG_LEVEL=debug
