@@ -2,6 +2,13 @@
 
 This file only reflects the changes that are made in this image. Please refer to the upstream GitLab [CHANGELOG](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/CHANGELOG) for the list of changes in GitLab.
 
+**8.13.0**
+- gitlab: upgrade to EE v8.13.0.
+- Upgrade gitlab-shell to v3.6.6.
+- Upgrade gitlab-workhorse to v0.8.5.
+- Add `GITLAB_EMAIL_SUBJECT_SUFFIX` environment variable.
+- Add opinionated git-trace logging file target to gitlab-shell.
+
 **8.12.9**
 - gitlab: upgrade to EE v8.12.9 to fix XSS vulnerability.
 
