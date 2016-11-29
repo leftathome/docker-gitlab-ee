@@ -2,6 +2,9 @@
 
 This file only reflects the changes that are made in this image. Please refer to the upstream GitLab [CHANGELOG](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/CHANGELOG) for the list of changes in GitLab.
 
+**8.13.7**
+- gitlab: upgrade to EE v8.13.7.
+
 **8.13.0**
 - gitlab: upgrade to EE v8.13.0.
 - Upgrade gitlab-shell to v3.6.6.
